@@ -2,47 +2,41 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Month from './Month';
-import { monthStart, monthEnd } from '../utils/dateUtils';
 
 export default class Calendar extends React.Component {
   static propTypes = {
-    startDate: PropTypes.instanceOf(Date).isRequired,
-    data: PropTypes.array,
+    year: PropTypes.instanceOf(Date).isRequired,
+    prevYear: PropTypes.func.isRequired,
+    nextYear: PropTypes.func.isRequired,
   };
 
-  static defaultProps = { data: [] };
+  renderMonths = () => {
+    const yearNumber = this.props.year.getFullYear();
 
-  renderRow = (startMonth, year) => {
-    const inRow = 4;
+    const items = [...Array(12)].map((el, ind) => {
+      const month = new Date(yearNumber, ind);
+      return <Month key={`month${ind}`} month={month} />;
+    });
 
     return (
-      <div className="month-row">
-        {[...Array(inRow)].map((_, i) => {
-          const month = startMonth + i;
-          const data = this.props.data
-            .filter(({ date }) => date >= monthStart(date) && date <= monthEnd(date));
-
-          return <Month key={month} date={new Date(year, month)} data={data} />;
-        })}
+      <div className="months">
+        {items}
       </div>
     );
   };
 
   render() {
-    const { startDate } = this.props;
-    const month = startDate.getMonth();
-    const year = startDate.getFullYear();
+    const { year } = this.props;
 
     return (
       <div className="calendar">
         <div>
           <button className="year-nav" type="button" onClick={this.props.prevYear}>&#x2329;</button>
-          <span className="year-title">{year}</span>
+          <span className="year-title">{year.getFullYear()}</span>
           <button className="year-nav" type="button" onClick={this.props.nextYear}>&#x232A;</button>
         </div>
-        {this.renderRow(month, year)}
-        {this.renderRow(month + 4, year)}
-        {this.renderRow(month + 8, year)}
+
+        {this.renderMonths()}
       </div>
     );
   }

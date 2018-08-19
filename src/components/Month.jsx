@@ -1,17 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Day from './Day';
+import DayComponent from '../containers/DayComponent';
 
 export default class Month extends React.Component {
   static propTypes = {
-    date: PropTypes.instanceOf(Date).isRequired,
-    data: PropTypes.arrayOf(PropTypes.shape({
-      date: PropTypes.PropTypes.instanceOf(Date).isRequired,
-    })),
+    month: PropTypes.instanceOf(Date).isRequired,
   };
-
-  static defaultProps = { data: [] };
 
   renderHeader = monthName => <div className="month-title">{monthName}</div>;
 
@@ -27,7 +22,12 @@ export default class Month extends React.Component {
     </ul>
   );
 
-  renderDays = (month, year) => {
+  // TODO: refacto
+
+  renderDays = (monthDate) => {
+    const month = monthDate.getMonth();
+    const year = monthDate.getFullYear();
+
     const monthEnd = new Date(year, month + 1, 0);
 
     const daysNumber = monthEnd.getDate();
@@ -54,30 +54,23 @@ export default class Month extends React.Component {
         {days.map((day) => {
           const isEmpty = day === '';
           const date = isEmpty ? null : new Date(year, month, day);
-          const data = isEmpty ? [] : this.props.data
-            .filter(item => item.date.getTime() === date.getTime());
-          return <Day date={date} data={data} />;
+          return <DayComponent date={date} />;
         })}
       </ul>
     );
   };
 
-  // TODO: render weekdays?
-
   render() {
-    const { date } = this.props;
-
-    const month = date.getMonth();
-    const year = date.getFullYear();
+    const { month } = this.props;
 
     const formatter = new Intl.DateTimeFormat('ru', { month: 'long' });
-    const monthName = formatter.format(date);
+    const monthName = formatter.format(month);
 
     return (
       <div className="month-cell">
         {this.renderHeader(monthName)}
         {this.renderWeekdays()}
-        {this.renderDays(month, year)}
+        {this.renderDays(month)}
       </div>
     );
   }

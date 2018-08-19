@@ -7,17 +7,16 @@
 }
 
 .calendar {
-  margin: 6px;
-  display: grid;
-  grid-template-rows: 20px repeat(3, 1fr);
+  margin: 4px 10px;
 }
 
 .year-title {
   font-size: 20px;
 }
 
-.month-row {
+.months {
   display: grid;
+  grid-template-rows: repeat(3, 1fr);
   grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 40px;
 }
