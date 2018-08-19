@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
+// TODO:
+// not a good architecture
+
 export default class Day extends React.Component {
   // TODO:
   static propTypes = {
